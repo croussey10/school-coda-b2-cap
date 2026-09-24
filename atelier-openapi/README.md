@@ -1,5 +1,10 @@
 # CATAPULTE Connect — Contrat d'API
 
+UTILISATION IA :
+- Pour certaines erreur
+- Pour certains paramètre
+- Pour rechercher les types de données (float, integer, ...)
+
 Module **CAP — Concevoir une API REST**. Coda Dijon, B2.
 
 L'Office National des Trajectoires Balistiques vous confie la conception du contrat
