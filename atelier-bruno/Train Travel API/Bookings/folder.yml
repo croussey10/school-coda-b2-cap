@@ -1,0 +1,12 @@
+info:
+  name: Bookings
+  type: folder
+
+request:
+  auth: inherit
+
+docs:
+  content: |
+    Create and manage bookings for train trips, including passenger details
+    and optional extras.
+  type: text/markdown

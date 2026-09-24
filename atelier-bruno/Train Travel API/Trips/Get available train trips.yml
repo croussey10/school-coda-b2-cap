@@ -1,0 +1,673 @@
+info:
+  name: Get available train trips
+  type: http
+  seq: 1
+  tags:
+    - Trips
+
+http:
+  method: GET
+  url: "{{baseUrl}}/trips"
+  params:
+    - name: page
+      value: "1"
+      type: query
+      description: The page number to return
+    - name: limit
+      value: "10"
+      type: query
+      description: The number of items to return per page
+    - name: origin
+      value: efdbb9d1-02c2-4bc3-afb7-6788d8782b1e
+      type: query
+      description: The ID of the origin station
+    - name: destination
+      value: b2e783e1-c824-4d63-b37a-d8d698862f1d
+      type: query
+      description: The ID of the destination station
+    - name: date
+      value: 2024-02-01T09:00:00Z
+      type: query
+      description: The date and time of the trip in ISO 8601 format in origin station's timezone.
+    - name: bicycles
+      value: "false"
+      type: query
+      description: Only return trips where bicycles are known to be allowed
+    - name: dogs
+      value: "false"
+      type: query
+      description: Only return trips where dogs are known to be allowed
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: A list of available train trips
+    request:
+      url: "{{baseUrl}}/trips"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: origin
+          value: efdbb9d1-02c2-4bc3-afb7-6788d8782b1e
+          type: query
+          description: The ID of the origin station
+        - name: destination
+          value: b2e783e1-c824-4d63-b37a-d8d698862f1d
+          type: query
+          description: The ID of the destination station
+        - name: date
+          value: 2024-02-01T09:00:00Z
+          type: query
+          description: The date and time of the trip in ISO 8601 format in origin station's timezone.
+        - name: bicycles
+          value: "false"
+          type: query
+          description: Only return trips where bicycles are known to be allowed
+        - name: dogs
+          value: "false"
+          type: query
+          description: Only return trips where dogs are known to be allowed
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "data": [
+              {
+                "id": "ea399ba1-6d95-433f-92d1-83f67b775594",
+                "origin": "efdbb9d1-02c2-4bc3-afb7-6788d8782b1e",
+                "destination": "b2e783e1-c824-4d63-b37a-d8d698862f1d",
+                "departure_time": "2024-02-01T10:00:00Z",
+                "arrival_time": "2024-02-01T16:00:00Z",
+                "price": 50,
+                "operator": "Deutsche Bahn",
+                "bicycles_allowed": true,
+                "dogs_allowed": true,
+                "links": {
+                  "self": "https://api.example.com/trips/ea399ba1-6d95-433f-92d1-83f67b775594",
+                  "origin": "https://api.example.com/stations/efdbb9d1-02c2-4bc3-afb7-6788d8782b1e",
+                  "destination": "https://api.example.com/stations/b2e783e1-c824-4d63-b37a-d8d698862f1d"
+                }
+              },
+              {
+                "id": "4d67459c-af07-40bb-bb12-178dbb88e09f",
+                "origin": "b2e783e1-c824-4d63-b37a-d8d698862f1d",
+                "destination": "efdbb9d1-02c2-4bc3-afb7-6788d8782b1e",
+                "departure_time": "2024-02-01T12:00:00Z",
+                "arrival_time": "2024-02-01T18:00:00Z",
+                "price": 50,
+                "operator": "SNCF",
+                "bicycles_allowed": true,
+                "dogs_allowed": true,
+                "links": {
+                  "self": "https://api.example.com/trips/4d67459c-af07-40bb-bb12-178dbb88e09f",
+                  "origin": "https://api.example.com/stations/b2e783e1-c824-4d63-b37a-d8d698862f1d",
+                  "destination": "https://api.example.com/stations/efdbb9d1-02c2-4bc3-afb7-6788d8782b1e"
+                }
+              }
+            ],
+            "links": {
+              "self": "https://api.example.com/trips?origin=efdbb9d1-02c2-4bc3-afb7-6788d8782b1e&destination=b2e783e1-c824-4d63-b37a-d8d698862f1d&date=2024-02-01",
+              "next": "https://api.example.com/trips?origin=efdbb9d1-02c2-4bc3-afb7-6788d8782b1e&destination=b2e783e1-c824-4d63-b37a-d8d698862f1d&date=2024-02-01&page=2"
+            }
+          }
+  - name: 200 Response
+    description: A list of available train trips
+    request:
+      url: "{{baseUrl}}/trips"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: origin
+          value: efdbb9d1-02c2-4bc3-afb7-6788d8782b1e
+          type: query
+          description: The ID of the origin station
+        - name: destination
+          value: b2e783e1-c824-4d63-b37a-d8d698862f1d
+          type: query
+          description: The ID of the destination station
+        - name: date
+          value: 2024-02-01T09:00:00Z
+          type: query
+          description: The date and time of the trip in ISO 8601 format in origin station's timezone.
+        - name: bicycles
+          value: "false"
+          type: query
+          description: Only return trips where bicycles are known to be allowed
+        - name: dogs
+          value: "false"
+          type: query
+          description: Only return trips where dogs are known to be allowed
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/xml
+      body:
+        type: xml
+        data: ""
+  - name: 400 Response
+    description: Bad Request
+    request:
+      url: "{{baseUrl}}/trips"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: origin
+          value: efdbb9d1-02c2-4bc3-afb7-6788d8782b1e
+          type: query
+          description: The ID of the origin station
+        - name: destination
+          value: b2e783e1-c824-4d63-b37a-d8d698862f1d
+          type: query
+          description: The ID of the destination station
+        - name: date
+          value: 2024-02-01T09:00:00Z
+          type: query
+          description: The date and time of the trip in ISO 8601 format in origin station's timezone.
+        - name: bicycles
+          value: "false"
+          type: query
+          description: Only return trips where bicycles are known to be allowed
+        - name: dogs
+          value: "false"
+          type: query
+          description: Only return trips where dogs are known to be allowed
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/bad-request",
+            "title": "Bad Request",
+            "status": 400,
+            "detail": "The request is invalid or missing required parameters."
+          }
+  - name: 400 Response
+    description: Bad Request
+    request:
+      url: "{{baseUrl}}/trips"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: origin
+          value: efdbb9d1-02c2-4bc3-afb7-6788d8782b1e
+          type: query
+          description: The ID of the origin station
+        - name: destination
+          value: b2e783e1-c824-4d63-b37a-d8d698862f1d
+          type: query
+          description: The ID of the destination station
+        - name: date
+          value: 2024-02-01T09:00:00Z
+          type: query
+          description: The date and time of the trip in ISO 8601 format in origin station's timezone.
+        - name: bicycles
+          value: "false"
+          type: query
+          description: Only return trips where bicycles are known to be allowed
+        - name: dogs
+          value: "false"
+          type: query
+          description: Only return trips where dogs are known to be allowed
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/bad-request</type>
+            <title>Bad Request</title>
+            <status>400</status>
+            <detail>The request is invalid or missing required parameters.</detail>
+          </root>
+  - name: 401 Response
+    description: Unauthorized
+    request:
+      url: "{{baseUrl}}/trips"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: origin
+          value: efdbb9d1-02c2-4bc3-afb7-6788d8782b1e
+          type: query
+          description: The ID of the origin station
+        - name: destination
+          value: b2e783e1-c824-4d63-b37a-d8d698862f1d
+          type: query
+          description: The ID of the destination station
+        - name: date
+          value: 2024-02-01T09:00:00Z
+          type: query
+          description: The date and time of the trip in ISO 8601 format in origin station's timezone.
+        - name: bicycles
+          value: "false"
+          type: query
+          description: Only return trips where bicycles are known to be allowed
+        - name: dogs
+          value: "false"
+          type: query
+          description: Only return trips where dogs are known to be allowed
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/unauthorized",
+            "title": "Unauthorized",
+            "status": 401,
+            "detail": "You do not have the necessary permissions."
+          }
+  - name: 401 Response
+    description: Unauthorized
+    request:
+      url: "{{baseUrl}}/trips"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: origin
+          value: efdbb9d1-02c2-4bc3-afb7-6788d8782b1e
+          type: query
+          description: The ID of the origin station
+        - name: destination
+          value: b2e783e1-c824-4d63-b37a-d8d698862f1d
+          type: query
+          description: The ID of the destination station
+        - name: date
+          value: 2024-02-01T09:00:00Z
+          type: query
+          description: The date and time of the trip in ISO 8601 format in origin station's timezone.
+        - name: bicycles
+          value: "false"
+          type: query
+          description: Only return trips where bicycles are known to be allowed
+        - name: dogs
+          value: "false"
+          type: query
+          description: Only return trips where dogs are known to be allowed
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/unauthorized</type>
+            <title>Unauthorized</title>
+            <status>401</status>
+            <detail>You do not have the necessary permissions.</detail>
+          </root>
+  - name: 403 Response
+    description: Forbidden
+    request:
+      url: "{{baseUrl}}/trips"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: origin
+          value: efdbb9d1-02c2-4bc3-afb7-6788d8782b1e
+          type: query
+          description: The ID of the origin station
+        - name: destination
+          value: b2e783e1-c824-4d63-b37a-d8d698862f1d
+          type: query
+          description: The ID of the destination station
+        - name: date
+          value: 2024-02-01T09:00:00Z
+          type: query
+          description: The date and time of the trip in ISO 8601 format in origin station's timezone.
+        - name: bicycles
+          value: "false"
+          type: query
+          description: Only return trips where bicycles are known to be allowed
+        - name: dogs
+          value: "false"
+          type: query
+          description: Only return trips where dogs are known to be allowed
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/forbidden",
+            "title": "Forbidden",
+            "status": 403,
+            "detail": "Access is forbidden with the provided credentials."
+          }
+  - name: 403 Response
+    description: Forbidden
+    request:
+      url: "{{baseUrl}}/trips"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: origin
+          value: efdbb9d1-02c2-4bc3-afb7-6788d8782b1e
+          type: query
+          description: The ID of the origin station
+        - name: destination
+          value: b2e783e1-c824-4d63-b37a-d8d698862f1d
+          type: query
+          description: The ID of the destination station
+        - name: date
+          value: 2024-02-01T09:00:00Z
+          type: query
+          description: The date and time of the trip in ISO 8601 format in origin station's timezone.
+        - name: bicycles
+          value: "false"
+          type: query
+          description: Only return trips where bicycles are known to be allowed
+        - name: dogs
+          value: "false"
+          type: query
+          description: Only return trips where dogs are known to be allowed
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/forbidden</type>
+            <title>Forbidden</title>
+            <status>403</status>
+            <detail>Access is forbidden with the provided credentials.</detail>
+          </root>
+  - name: 429 Response
+    description: Too Many Requests
+    request:
+      url: "{{baseUrl}}/trips"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: origin
+          value: efdbb9d1-02c2-4bc3-afb7-6788d8782b1e
+          type: query
+          description: The ID of the origin station
+        - name: destination
+          value: b2e783e1-c824-4d63-b37a-d8d698862f1d
+          type: query
+          description: The ID of the destination station
+        - name: date
+          value: 2024-02-01T09:00:00Z
+          type: query
+          description: The date and time of the trip in ISO 8601 format in origin station's timezone.
+        - name: bicycles
+          value: "false"
+          type: query
+          description: Only return trips where bicycles are known to be allowed
+        - name: dogs
+          value: "false"
+          type: query
+          description: Only return trips where dogs are known to be allowed
+    response:
+      status: 429
+      statusText: Too Many Requests
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/too-many-requests",
+            "title": "Too Many Requests",
+            "status": 429,
+            "detail": "You have exceeded the rate limit."
+          }
+  - name: 429 Response
+    description: Too Many Requests
+    request:
+      url: "{{baseUrl}}/trips"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: origin
+          value: efdbb9d1-02c2-4bc3-afb7-6788d8782b1e
+          type: query
+          description: The ID of the origin station
+        - name: destination
+          value: b2e783e1-c824-4d63-b37a-d8d698862f1d
+          type: query
+          description: The ID of the destination station
+        - name: date
+          value: 2024-02-01T09:00:00Z
+          type: query
+          description: The date and time of the trip in ISO 8601 format in origin station's timezone.
+        - name: bicycles
+          value: "false"
+          type: query
+          description: Only return trips where bicycles are known to be allowed
+        - name: dogs
+          value: "false"
+          type: query
+          description: Only return trips where dogs are known to be allowed
+    response:
+      status: 429
+      statusText: Too Many Requests
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/too-many-requests</type>
+            <title>Too Many Requests</title>
+            <status>429</status>
+            <detail>You have exceeded the rate limit.</detail>
+          </root>
+  - name: 500 Response
+    description: Internal Server Error
+    request:
+      url: "{{baseUrl}}/trips"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: origin
+          value: efdbb9d1-02c2-4bc3-afb7-6788d8782b1e
+          type: query
+          description: The ID of the origin station
+        - name: destination
+          value: b2e783e1-c824-4d63-b37a-d8d698862f1d
+          type: query
+          description: The ID of the destination station
+        - name: date
+          value: 2024-02-01T09:00:00Z
+          type: query
+          description: The date and time of the trip in ISO 8601 format in origin station's timezone.
+        - name: bicycles
+          value: "false"
+          type: query
+          description: Only return trips where bicycles are known to be allowed
+        - name: dogs
+          value: "false"
+          type: query
+          description: Only return trips where dogs are known to be allowed
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/internal-server-error",
+            "title": "Internal Server Error",
+            "status": 500,
+            "detail": "An unexpected error occurred."
+          }
+  - name: 500 Response
+    description: Internal Server Error
+    request:
+      url: "{{baseUrl}}/trips"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: origin
+          value: efdbb9d1-02c2-4bc3-afb7-6788d8782b1e
+          type: query
+          description: The ID of the origin station
+        - name: destination
+          value: b2e783e1-c824-4d63-b37a-d8d698862f1d
+          type: query
+          description: The ID of the destination station
+        - name: date
+          value: 2024-02-01T09:00:00Z
+          type: query
+          description: The date and time of the trip in ISO 8601 format in origin station's timezone.
+        - name: bicycles
+          value: "false"
+          type: query
+          description: Only return trips where bicycles are known to be allowed
+        - name: dogs
+          value: "false"
+          type: query
+          description: Only return trips where dogs are known to be allowed
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/internal-server-error</type>
+            <title>Internal Server Error</title>
+            <status>500</status>
+            <detail>An unexpected error occurred.</detail>
+          </root>
+
+docs: |
+  Returns a list of available train trips between the specified origin and destination stations on the given date, and allows for filtering by bicycle and dog allowances.

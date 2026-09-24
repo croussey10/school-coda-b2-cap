@@ -1,0 +1,4 @@
+name: Mock local (Prism)
+variables:
+  - name: baseUrl
+    value: http://localhost:4010

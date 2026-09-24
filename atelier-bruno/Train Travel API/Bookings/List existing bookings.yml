@@ -1,0 +1,394 @@
+info:
+  name: List existing bookings
+  type: http
+  seq: 1
+  tags:
+    - Bookings
+
+http:
+  method: GET
+  url: "{{baseUrl}}/bookings"
+  params:
+    - name: page
+      value: "1"
+      type: query
+      description: The page number to return
+    - name: limit
+      value: "10"
+      type: query
+      description: The number of items to return per page
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: A list of bookings
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "data": [
+              {
+                "id": "efdbb9d1-02c2-4bc3-afb7-6788d8782b1e",
+                "trip_id": "efdbb9d1-02c2-4bc3-afb7-6788d8782b1e",
+                "passenger_name": "John Doe",
+                "has_bicycle": true,
+                "has_dog": true
+              },
+              {
+                "id": "b2e783e1-c824-4d63-b37a-d8d698862f1d",
+                "trip_id": "b2e783e1-c824-4d63-b37a-d8d698862f1d",
+                "passenger_name": "Jane Smith",
+                "has_bicycle": false,
+                "has_dog": false
+              }
+            ],
+            "links": {
+              "self": "https://api.example.com/bookings",
+              "next": "https://api.example.com/bookings?page=2"
+            }
+          }
+  - name: 200 Response
+    description: A list of bookings
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/xml
+      body:
+        type: xml
+        data: ""
+  - name: 400 Response
+    description: Bad Request
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/bad-request",
+            "title": "Bad Request",
+            "status": 400,
+            "detail": "The request is invalid or missing required parameters."
+          }
+  - name: 400 Response
+    description: Bad Request
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/bad-request</type>
+            <title>Bad Request</title>
+            <status>400</status>
+            <detail>The request is invalid or missing required parameters.</detail>
+          </root>
+  - name: 401 Response
+    description: Unauthorized
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/unauthorized",
+            "title": "Unauthorized",
+            "status": 401,
+            "detail": "You do not have the necessary permissions."
+          }
+  - name: 401 Response
+    description: Unauthorized
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/unauthorized</type>
+            <title>Unauthorized</title>
+            <status>401</status>
+            <detail>You do not have the necessary permissions.</detail>
+          </root>
+  - name: 403 Response
+    description: Forbidden
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/forbidden",
+            "title": "Forbidden",
+            "status": 403,
+            "detail": "Access is forbidden with the provided credentials."
+          }
+  - name: 403 Response
+    description: Forbidden
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/forbidden</type>
+            <title>Forbidden</title>
+            <status>403</status>
+            <detail>Access is forbidden with the provided credentials.</detail>
+          </root>
+  - name: 429 Response
+    description: Too Many Requests
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 429
+      statusText: Too Many Requests
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/too-many-requests",
+            "title": "Too Many Requests",
+            "status": 429,
+            "detail": "You have exceeded the rate limit."
+          }
+  - name: 429 Response
+    description: Too Many Requests
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 429
+      statusText: Too Many Requests
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/too-many-requests</type>
+            <title>Too Many Requests</title>
+            <status>429</status>
+            <detail>You have exceeded the rate limit.</detail>
+          </root>
+  - name: 500 Response
+    description: Internal Server Error
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/internal-server-error",
+            "title": "Internal Server Error",
+            "status": 500,
+            "detail": "An unexpected error occurred."
+          }
+  - name: 500 Response
+    description: Internal Server Error
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/internal-server-error</type>
+            <title>Internal Server Error</title>
+            <status>500</status>
+            <detail>An unexpected error occurred.</detail>
+          </root>
+
+docs: Returns a list of all trip bookings by the authenticated user.

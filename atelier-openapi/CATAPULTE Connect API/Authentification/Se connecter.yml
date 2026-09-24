@@ -1,0 +1,149 @@
+info:
+  name: Se connecter
+  type: http
+  seq: 2
+  tags:
+    - Authentification
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+        "email": "bob@example.com",
+        "password": "correct-horse-battery-staple"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: Jetons délivrés.
+    request:
+      url: "{{baseUrl}}/auth/login"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "email": "bob@example.com",
+            "password": "correct-horse-battery-staple"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "accessToken": "",
+            "refreshToken": ""
+          }
+  - name: 400 Response
+    description: Corps de requête illisible (JSON malformé).
+    request:
+      url: "{{baseUrl}}/auth/login"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "email": "bob@example.com",
+            "password": "correct-horse-battery-staple"
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "about:blank",
+            "title": "Bad Request",
+            "status": 400,
+            "detail": "Syntax error in JSON body."
+          }
+  - name: 401 Response
+    description: Identifiants invalides.
+    request:
+      url: "{{baseUrl}}/auth/login"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "email": "bob@example.com",
+            "password": "correct-horse-battery-staple"
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://api.catapulte-connect.ontb.example/errors/invalid-credentials",
+            "title": "Identifiants invalides",
+            "status": 401,
+            "detail": "Adresse e-mail ou mot de passe incorrect."
+          }
+  - name: 422 Response
+    description: |
+      Le corps est syntaxiquement valide mais une ou plusieurs valeurs sont refusées.
+      À distinguer du `400`, qui signale un JSON illisible.
+    request:
+      url: "{{baseUrl}}/auth/login"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "email": "bob@example.com",
+            "password": "correct-horse-battery-staple"
+          }
+    response:
+      status: 422
+      statusText: Unprocessable Entity
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://api.catapulte-connect.ontb.example/errors/validation",
+            "title": "Données invalides",
+            "status": 422,
+            "detail": "1 champ est en erreur.",
+            "violations": [
+              {
+                "propertyPath": "passengers",
+                "message": "Le nombre de places doit être supérieur ou égal à 1."
+              }
+            ]
+          }
+
+docs: |
+  Authentifie un voyageur et délivre deux jetons : un jeton d'accès, à présenter
+  à chaque appel protégé, et un jeton de renouvellement, qui permet d'en obtenir
+  un nouveau sans ressaisir son mot de passe.
+
+  L'ONTB ne propose pas de déconnexion : un jeton d'accès expire de lui-même au
+  bout d'une heure.

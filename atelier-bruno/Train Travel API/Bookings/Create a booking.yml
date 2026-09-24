@@ -1,0 +1,475 @@
+info:
+  name: Create a booking
+  type: http
+  seq: 2
+  tags:
+    - Bookings
+
+http:
+  method: POST
+  url: "{{baseUrl}}/bookings"
+  body:
+    type: json
+    data: |-
+      {
+        "id": "",
+        "trip_id": "",
+        "passenger_name": "",
+        "has_bicycle": false,
+        "has_dog": false
+      }
+  auth:
+    type: oauth2
+    flow: authorization_code
+    authorizationUrl: https://example.com/oauth/authorize
+    accessTokenUrl: https://example.com/oauth/token
+    refreshTokenUrl: "{{oauth_refresh_url}}"
+    callbackUrl: "{{oauth_callback_url}}"
+    credentials:
+      clientId: "{{oauth_client_id}}"
+      clientSecret: "{{oauth_client_secret}}"
+      placement: header
+    scope: read write
+    state: "{{oauth_state}}"
+    tokenConfig:
+      placement:
+        header: Bearer
+      source: access_token
+    settings:
+      autoFetchToken: false
+      autoRefreshToken: true
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 201 Response
+    description: Booking successful
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "trip_id": "",
+            "passenger_name": "",
+            "has_bicycle": false,
+            "has_dog": false
+          }
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "efdbb9d1-02c2-4bc3-afb7-6788d8782b1e",
+            "trip_id": "efdbb9d1-02c2-4bc3-afb7-6788d8782b1e",
+            "passenger_name": "John Doe",
+            "has_bicycle": true,
+            "has_dog": true,
+            "links": {
+              "self": "https://api.example.com/bookings/efdbb9d1-02c2-4bc3-afb7-6788d8782b1e"
+            }
+          }
+  - name: 201 Response
+    description: Booking successful
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "trip_id": "",
+            "passenger_name": "",
+            "has_bicycle": false,
+            "has_dog": false
+          }
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/xml
+      body:
+        type: xml
+        data: ""
+  - name: 400 Response
+    description: Bad Request
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "trip_id": "",
+            "passenger_name": "",
+            "has_bicycle": false,
+            "has_dog": false
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/bad-request",
+            "title": "Bad Request",
+            "status": 400,
+            "detail": "The request is invalid or missing required parameters."
+          }
+  - name: 400 Response
+    description: Bad Request
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "trip_id": "",
+            "passenger_name": "",
+            "has_bicycle": false,
+            "has_dog": false
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/bad-request</type>
+            <title>Bad Request</title>
+            <status>400</status>
+            <detail>The request is invalid or missing required parameters.</detail>
+          </root>
+  - name: 401 Response
+    description: Unauthorized
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "trip_id": "",
+            "passenger_name": "",
+            "has_bicycle": false,
+            "has_dog": false
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/unauthorized",
+            "title": "Unauthorized",
+            "status": 401,
+            "detail": "You do not have the necessary permissions."
+          }
+  - name: 401 Response
+    description: Unauthorized
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "trip_id": "",
+            "passenger_name": "",
+            "has_bicycle": false,
+            "has_dog": false
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/unauthorized</type>
+            <title>Unauthorized</title>
+            <status>401</status>
+            <detail>You do not have the necessary permissions.</detail>
+          </root>
+  - name: 404 Response
+    description: Not Found
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "trip_id": "",
+            "passenger_name": "",
+            "has_bicycle": false,
+            "has_dog": false
+          }
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/not-found",
+            "title": "Not Found",
+            "status": 404,
+            "detail": "The requested resource was not found."
+          }
+  - name: 404 Response
+    description: Not Found
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "trip_id": "",
+            "passenger_name": "",
+            "has_bicycle": false,
+            "has_dog": false
+          }
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/not-found</type>
+            <title>Not Found</title>
+            <status>404</status>
+            <detail>The requested resource was not found.</detail>
+          </root>
+  - name: 409 Response
+    description: Conflict
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "trip_id": "",
+            "passenger_name": "",
+            "has_bicycle": false,
+            "has_dog": false
+          }
+    response:
+      status: 409
+      statusText: Conflict
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/conflict",
+            "title": "Conflict",
+            "status": 409,
+            "detail": "There is a conflict with an existing resource."
+          }
+  - name: 409 Response
+    description: Conflict
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "trip_id": "",
+            "passenger_name": "",
+            "has_bicycle": false,
+            "has_dog": false
+          }
+    response:
+      status: 409
+      statusText: Conflict
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/conflict</type>
+            <title>Conflict</title>
+            <status>409</status>
+            <detail>There is a conflict with an existing resource.</detail>
+          </root>
+  - name: 429 Response
+    description: Too Many Requests
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "trip_id": "",
+            "passenger_name": "",
+            "has_bicycle": false,
+            "has_dog": false
+          }
+    response:
+      status: 429
+      statusText: Too Many Requests
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/too-many-requests",
+            "title": "Too Many Requests",
+            "status": 429,
+            "detail": "You have exceeded the rate limit."
+          }
+  - name: 429 Response
+    description: Too Many Requests
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "trip_id": "",
+            "passenger_name": "",
+            "has_bicycle": false,
+            "has_dog": false
+          }
+    response:
+      status: 429
+      statusText: Too Many Requests
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/too-many-requests</type>
+            <title>Too Many Requests</title>
+            <status>429</status>
+            <detail>You have exceeded the rate limit.</detail>
+          </root>
+  - name: 500 Response
+    description: Internal Server Error
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "trip_id": "",
+            "passenger_name": "",
+            "has_bicycle": false,
+            "has_dog": false
+          }
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/internal-server-error",
+            "title": "Internal Server Error",
+            "status": 500,
+            "detail": "An unexpected error occurred."
+          }
+  - name: 500 Response
+    description: Internal Server Error
+    request:
+      url: "{{baseUrl}}/bookings"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "trip_id": "",
+            "passenger_name": "",
+            "has_bicycle": false,
+            "has_dog": false
+          }
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/internal-server-error</type>
+            <title>Internal Server Error</title>
+            <status>500</status>
+            <detail>An unexpected error occurred.</detail>
+          </root>
+
+docs: A booking is a temporary hold on a trip. It is not confirmed until the payment is processed.

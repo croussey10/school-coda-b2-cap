@@ -1,0 +1,1026 @@
+info:
+  name: Pay for a Booking
+  type: http
+  seq: 1
+  tags:
+    - Payments
+
+http:
+  method: POST
+  url: "{{baseUrl}}/bookings/:bookingId/payment"
+  params:
+    - name: bookingId
+      value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+      type: path
+      description: The ID of the booking to pay for.
+  body:
+    type: json
+    data: |-
+      {
+        "amount": 49.99,
+        "currency": "gbp",
+        "source": {
+          "object": "card",
+          "name": "J. Doe",
+          "number": "4242424242424242",
+          "cvc": "123",
+          "exp_month": 12,
+          "exp_year": 2025,
+          "address_line1": "123 Fake Street",
+          "address_line2": "4th Floor",
+          "address_city": "London",
+          "address_country": "gb",
+          "address_post_code": "N12 9XX"
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: Card Payment
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 49.99,
+            "currency": "gbp",
+            "source": {
+              "object": "card",
+              "name": "J. Doe",
+              "number": "4242424242424242",
+              "cvc": "123",
+              "exp_month": 12,
+              "exp_year": 2025,
+              "address_line1": "123 Fake Street",
+              "address_line2": "4th Floor",
+              "address_city": "London",
+              "address_country": "gb",
+              "address_post_code": "N12 9XX"
+            }
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "2e3b4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a",
+            "amount": 49.99,
+            "currency": "gbp",
+            "source": {
+              "object": "card",
+              "name": "J. Doe",
+              "number": "************4242",
+              "cvc": "123",
+              "exp_month": 12,
+              "exp_year": 2025,
+              "address_country": "gb",
+              "address_post_code": "N12 9XX"
+            },
+            "status": "succeeded",
+            "links": {
+              "booking": "https://api.example.com/bookings/1725ff48-ab45-4bb5-9d02-88745177dedb/payment"
+            }
+          }
+  - name: Bank Account Payment
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 100.5,
+            "currency": "gbp",
+            "source": {
+              "object": "bank_account",
+              "name": "J. Doe",
+              "number": "00012345",
+              "sort_code": "000123",
+              "account_type": "individual",
+              "bank_name": "Starling Bank",
+              "country": "gb"
+            }
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "2e3b4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a",
+            "amount": 100.5,
+            "currency": "gbp",
+            "source": {
+              "object": "bank_account",
+              "name": "J. Doe",
+              "account_type": "individual",
+              "number": "*********2345",
+              "sort_code": "000123",
+              "bank_name": "Starling Bank",
+              "country": "gb"
+            },
+            "status": "succeeded",
+            "links": {
+              "booking": "https://api.example.com/bookings/1725ff48-ab45-4bb5-9d02-88745177dedb"
+            }
+          }
+  - name: 400 Response (Card Payment)
+    description: Bad Request
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 49.99,
+            "currency": "gbp",
+            "source": {
+              "object": "card",
+              "name": "J. Doe",
+              "number": "4242424242424242",
+              "cvc": "123",
+              "exp_month": 12,
+              "exp_year": 2025,
+              "address_line1": "123 Fake Street",
+              "address_line2": "4th Floor",
+              "address_city": "London",
+              "address_country": "gb",
+              "address_post_code": "N12 9XX"
+            }
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/bad-request",
+            "title": "Bad Request",
+            "status": 400,
+            "detail": "The request is invalid or missing required parameters."
+          }
+  - name: 400 Response (Bank Account Payment)
+    description: Bad Request
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 100.5,
+            "currency": "gbp",
+            "source": {
+              "object": "bank_account",
+              "name": "J. Doe",
+              "number": "00012345",
+              "sort_code": "000123",
+              "account_type": "individual",
+              "bank_name": "Starling Bank",
+              "country": "gb"
+            }
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/bad-request",
+            "title": "Bad Request",
+            "status": 400,
+            "detail": "The request is invalid or missing required parameters."
+          }
+  - name: 400 Response (Card Payment)
+    description: Bad Request
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 49.99,
+            "currency": "gbp",
+            "source": {
+              "object": "card",
+              "name": "J. Doe",
+              "number": "4242424242424242",
+              "cvc": "123",
+              "exp_month": 12,
+              "exp_year": 2025,
+              "address_line1": "123 Fake Street",
+              "address_line2": "4th Floor",
+              "address_city": "London",
+              "address_country": "gb",
+              "address_post_code": "N12 9XX"
+            }
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/bad-request</type>
+            <title>Bad Request</title>
+            <status>400</status>
+            <detail>The request is invalid or missing required parameters.</detail>
+          </root>
+  - name: 400 Response (Bank Account Payment)
+    description: Bad Request
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 100.5,
+            "currency": "gbp",
+            "source": {
+              "object": "bank_account",
+              "name": "J. Doe",
+              "number": "00012345",
+              "sort_code": "000123",
+              "account_type": "individual",
+              "bank_name": "Starling Bank",
+              "country": "gb"
+            }
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/bad-request</type>
+            <title>Bad Request</title>
+            <status>400</status>
+            <detail>The request is invalid or missing required parameters.</detail>
+          </root>
+  - name: 401 Response (Card Payment)
+    description: Unauthorized
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 49.99,
+            "currency": "gbp",
+            "source": {
+              "object": "card",
+              "name": "J. Doe",
+              "number": "4242424242424242",
+              "cvc": "123",
+              "exp_month": 12,
+              "exp_year": 2025,
+              "address_line1": "123 Fake Street",
+              "address_line2": "4th Floor",
+              "address_city": "London",
+              "address_country": "gb",
+              "address_post_code": "N12 9XX"
+            }
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/unauthorized",
+            "title": "Unauthorized",
+            "status": 401,
+            "detail": "You do not have the necessary permissions."
+          }
+  - name: 401 Response (Bank Account Payment)
+    description: Unauthorized
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 100.5,
+            "currency": "gbp",
+            "source": {
+              "object": "bank_account",
+              "name": "J. Doe",
+              "number": "00012345",
+              "sort_code": "000123",
+              "account_type": "individual",
+              "bank_name": "Starling Bank",
+              "country": "gb"
+            }
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/unauthorized",
+            "title": "Unauthorized",
+            "status": 401,
+            "detail": "You do not have the necessary permissions."
+          }
+  - name: 401 Response (Card Payment)
+    description: Unauthorized
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 49.99,
+            "currency": "gbp",
+            "source": {
+              "object": "card",
+              "name": "J. Doe",
+              "number": "4242424242424242",
+              "cvc": "123",
+              "exp_month": 12,
+              "exp_year": 2025,
+              "address_line1": "123 Fake Street",
+              "address_line2": "4th Floor",
+              "address_city": "London",
+              "address_country": "gb",
+              "address_post_code": "N12 9XX"
+            }
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/unauthorized</type>
+            <title>Unauthorized</title>
+            <status>401</status>
+            <detail>You do not have the necessary permissions.</detail>
+          </root>
+  - name: 401 Response (Bank Account Payment)
+    description: Unauthorized
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 100.5,
+            "currency": "gbp",
+            "source": {
+              "object": "bank_account",
+              "name": "J. Doe",
+              "number": "00012345",
+              "sort_code": "000123",
+              "account_type": "individual",
+              "bank_name": "Starling Bank",
+              "country": "gb"
+            }
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/unauthorized</type>
+            <title>Unauthorized</title>
+            <status>401</status>
+            <detail>You do not have the necessary permissions.</detail>
+          </root>
+  - name: 403 Response (Card Payment)
+    description: Forbidden
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 49.99,
+            "currency": "gbp",
+            "source": {
+              "object": "card",
+              "name": "J. Doe",
+              "number": "4242424242424242",
+              "cvc": "123",
+              "exp_month": 12,
+              "exp_year": 2025,
+              "address_line1": "123 Fake Street",
+              "address_line2": "4th Floor",
+              "address_city": "London",
+              "address_country": "gb",
+              "address_post_code": "N12 9XX"
+            }
+          }
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/forbidden",
+            "title": "Forbidden",
+            "status": 403,
+            "detail": "Access is forbidden with the provided credentials."
+          }
+  - name: 403 Response (Bank Account Payment)
+    description: Forbidden
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 100.5,
+            "currency": "gbp",
+            "source": {
+              "object": "bank_account",
+              "name": "J. Doe",
+              "number": "00012345",
+              "sort_code": "000123",
+              "account_type": "individual",
+              "bank_name": "Starling Bank",
+              "country": "gb"
+            }
+          }
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/forbidden",
+            "title": "Forbidden",
+            "status": 403,
+            "detail": "Access is forbidden with the provided credentials."
+          }
+  - name: 403 Response (Card Payment)
+    description: Forbidden
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 49.99,
+            "currency": "gbp",
+            "source": {
+              "object": "card",
+              "name": "J. Doe",
+              "number": "4242424242424242",
+              "cvc": "123",
+              "exp_month": 12,
+              "exp_year": 2025,
+              "address_line1": "123 Fake Street",
+              "address_line2": "4th Floor",
+              "address_city": "London",
+              "address_country": "gb",
+              "address_post_code": "N12 9XX"
+            }
+          }
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/forbidden</type>
+            <title>Forbidden</title>
+            <status>403</status>
+            <detail>Access is forbidden with the provided credentials.</detail>
+          </root>
+  - name: 403 Response (Bank Account Payment)
+    description: Forbidden
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 100.5,
+            "currency": "gbp",
+            "source": {
+              "object": "bank_account",
+              "name": "J. Doe",
+              "number": "00012345",
+              "sort_code": "000123",
+              "account_type": "individual",
+              "bank_name": "Starling Bank",
+              "country": "gb"
+            }
+          }
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/forbidden</type>
+            <title>Forbidden</title>
+            <status>403</status>
+            <detail>Access is forbidden with the provided credentials.</detail>
+          </root>
+  - name: 429 Response (Card Payment)
+    description: Too Many Requests
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 49.99,
+            "currency": "gbp",
+            "source": {
+              "object": "card",
+              "name": "J. Doe",
+              "number": "4242424242424242",
+              "cvc": "123",
+              "exp_month": 12,
+              "exp_year": 2025,
+              "address_line1": "123 Fake Street",
+              "address_line2": "4th Floor",
+              "address_city": "London",
+              "address_country": "gb",
+              "address_post_code": "N12 9XX"
+            }
+          }
+    response:
+      status: 429
+      statusText: Too Many Requests
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/too-many-requests",
+            "title": "Too Many Requests",
+            "status": 429,
+            "detail": "You have exceeded the rate limit."
+          }
+  - name: 429 Response (Bank Account Payment)
+    description: Too Many Requests
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 100.5,
+            "currency": "gbp",
+            "source": {
+              "object": "bank_account",
+              "name": "J. Doe",
+              "number": "00012345",
+              "sort_code": "000123",
+              "account_type": "individual",
+              "bank_name": "Starling Bank",
+              "country": "gb"
+            }
+          }
+    response:
+      status: 429
+      statusText: Too Many Requests
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/too-many-requests",
+            "title": "Too Many Requests",
+            "status": 429,
+            "detail": "You have exceeded the rate limit."
+          }
+  - name: 429 Response (Card Payment)
+    description: Too Many Requests
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 49.99,
+            "currency": "gbp",
+            "source": {
+              "object": "card",
+              "name": "J. Doe",
+              "number": "4242424242424242",
+              "cvc": "123",
+              "exp_month": 12,
+              "exp_year": 2025,
+              "address_line1": "123 Fake Street",
+              "address_line2": "4th Floor",
+              "address_city": "London",
+              "address_country": "gb",
+              "address_post_code": "N12 9XX"
+            }
+          }
+    response:
+      status: 429
+      statusText: Too Many Requests
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/too-many-requests</type>
+            <title>Too Many Requests</title>
+            <status>429</status>
+            <detail>You have exceeded the rate limit.</detail>
+          </root>
+  - name: 429 Response (Bank Account Payment)
+    description: Too Many Requests
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 100.5,
+            "currency": "gbp",
+            "source": {
+              "object": "bank_account",
+              "name": "J. Doe",
+              "number": "00012345",
+              "sort_code": "000123",
+              "account_type": "individual",
+              "bank_name": "Starling Bank",
+              "country": "gb"
+            }
+          }
+    response:
+      status: 429
+      statusText: Too Many Requests
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/too-many-requests</type>
+            <title>Too Many Requests</title>
+            <status>429</status>
+            <detail>You have exceeded the rate limit.</detail>
+          </root>
+  - name: 500 Response (Card Payment)
+    description: Internal Server Error
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 49.99,
+            "currency": "gbp",
+            "source": {
+              "object": "card",
+              "name": "J. Doe",
+              "number": "4242424242424242",
+              "cvc": "123",
+              "exp_month": 12,
+              "exp_year": 2025,
+              "address_line1": "123 Fake Street",
+              "address_line2": "4th Floor",
+              "address_city": "London",
+              "address_country": "gb",
+              "address_post_code": "N12 9XX"
+            }
+          }
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/internal-server-error",
+            "title": "Internal Server Error",
+            "status": 500,
+            "detail": "An unexpected error occurred."
+          }
+  - name: 500 Response (Bank Account Payment)
+    description: Internal Server Error
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 100.5,
+            "currency": "gbp",
+            "source": {
+              "object": "bank_account",
+              "name": "J. Doe",
+              "number": "00012345",
+              "sort_code": "000123",
+              "account_type": "individual",
+              "bank_name": "Starling Bank",
+              "country": "gb"
+            }
+          }
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/internal-server-error",
+            "title": "Internal Server Error",
+            "status": 500,
+            "detail": "An unexpected error occurred."
+          }
+  - name: 500 Response (Card Payment)
+    description: Internal Server Error
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 49.99,
+            "currency": "gbp",
+            "source": {
+              "object": "card",
+              "name": "J. Doe",
+              "number": "4242424242424242",
+              "cvc": "123",
+              "exp_month": 12,
+              "exp_year": 2025,
+              "address_line1": "123 Fake Street",
+              "address_line2": "4th Floor",
+              "address_city": "London",
+              "address_country": "gb",
+              "address_post_code": "N12 9XX"
+            }
+          }
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/internal-server-error</type>
+            <title>Internal Server Error</title>
+            <status>500</status>
+            <detail>An unexpected error occurred.</detail>
+          </root>
+  - name: 500 Response (Bank Account Payment)
+    description: Internal Server Error
+    request:
+      url: "{{baseUrl}}/bookings/:bookingId/payment"
+      method: POST
+      params:
+        - name: bookingId
+          value: 1725ff48-ab45-4bb5-9d02-88745177dedb
+          type: path
+          description: The ID of the booking to pay for.
+      body:
+        type: json
+        data: |-
+          {
+            "amount": 100.5,
+            "currency": "gbp",
+            "source": {
+              "object": "bank_account",
+              "name": "J. Doe",
+              "number": "00012345",
+              "sort_code": "000123",
+              "account_type": "individual",
+              "bank_name": "Starling Bank",
+              "country": "gb"
+            }
+          }
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/internal-server-error</type>
+            <title>Internal Server Error</title>
+            <status>500</status>
+            <detail>An unexpected error occurred.</detail>
+          </root>
+
+docs: A payment is an attempt to pay for the booking, which will confirm the booking for the user and enable them to get their tickets.

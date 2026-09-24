@@ -1,0 +1,577 @@
+info:
+  name: Get a list of train stations
+  type: http
+  seq: 1
+  tags:
+    - Stations
+
+http:
+  method: GET
+  url: "{{baseUrl}}/stations"
+  params:
+    - name: page
+      value: "1"
+      type: query
+      description: The page number to return
+    - name: limit
+      value: "10"
+      type: query
+      description: The number of items to return per page
+    - name: coordinates
+      value: 52.5200,13.4050
+      type: query
+      description: |
+        The latitude and longitude of the user's location, to narrow down the search results to sites within a proximity of this location.
+    - name: search
+      value: Milano Centrale
+      type: query
+      description: |
+        A search term to filter the list of stations by name or address.
+    - name: country
+      value: DE
+      type: query
+      description: Filter stations by country code
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: OK
+    request:
+      url: "{{baseUrl}}/stations"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: coordinates
+          value: 52.5200,13.4050
+          type: query
+          description: |
+            The latitude and longitude of the user's location, to narrow down the search results to sites within a proximity of this location.
+        - name: search
+          value: Milano Centrale
+          type: query
+          description: |
+            A search term to filter the list of stations by name or address.
+        - name: country
+          value: DE
+          type: query
+          description: Filter stations by country code
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "data": [
+              {
+                "id": "efdbb9d1-02c2-4bc3-afb7-6788d8782b1e",
+                "name": "Berlin Hauptbahnhof",
+                "address": "Invalidenstraße 10557 Berlin, Germany",
+                "country_code": "DE",
+                "timezone": "Europe/Berlin"
+              },
+              {
+                "id": "b2e783e1-c824-4d63-b37a-d8d698862f1d",
+                "name": "Paris Gare du Nord",
+                "address": "18 Rue de Dunkerque 75010 Paris, France",
+                "country_code": "FR",
+                "timezone": "Europe/Paris"
+              }
+            ],
+            "links": {
+              "self": "https://api.example.com/stations&page=2",
+              "next": "https://api.example.com/stations?page=3",
+              "prev": "https://api.example.com/stations?page=1"
+            }
+          }
+  - name: 200 Response
+    description: OK
+    request:
+      url: "{{baseUrl}}/stations"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: coordinates
+          value: 52.5200,13.4050
+          type: query
+          description: |
+            The latitude and longitude of the user's location, to narrow down the search results to sites within a proximity of this location.
+        - name: search
+          value: Milano Centrale
+          type: query
+          description: |
+            A search term to filter the list of stations by name or address.
+        - name: country
+          value: DE
+          type: query
+          description: Filter stations by country code
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/xml
+      body:
+        type: xml
+        data: ""
+  - name: 400 Response
+    description: Bad Request
+    request:
+      url: "{{baseUrl}}/stations"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: coordinates
+          value: 52.5200,13.4050
+          type: query
+          description: |
+            The latitude and longitude of the user's location, to narrow down the search results to sites within a proximity of this location.
+        - name: search
+          value: Milano Centrale
+          type: query
+          description: |
+            A search term to filter the list of stations by name or address.
+        - name: country
+          value: DE
+          type: query
+          description: Filter stations by country code
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/bad-request",
+            "title": "Bad Request",
+            "status": 400,
+            "detail": "The request is invalid or missing required parameters."
+          }
+  - name: 400 Response
+    description: Bad Request
+    request:
+      url: "{{baseUrl}}/stations"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: coordinates
+          value: 52.5200,13.4050
+          type: query
+          description: |
+            The latitude and longitude of the user's location, to narrow down the search results to sites within a proximity of this location.
+        - name: search
+          value: Milano Centrale
+          type: query
+          description: |
+            A search term to filter the list of stations by name or address.
+        - name: country
+          value: DE
+          type: query
+          description: Filter stations by country code
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/bad-request</type>
+            <title>Bad Request</title>
+            <status>400</status>
+            <detail>The request is invalid or missing required parameters.</detail>
+          </root>
+  - name: 401 Response
+    description: Unauthorized
+    request:
+      url: "{{baseUrl}}/stations"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: coordinates
+          value: 52.5200,13.4050
+          type: query
+          description: |
+            The latitude and longitude of the user's location, to narrow down the search results to sites within a proximity of this location.
+        - name: search
+          value: Milano Centrale
+          type: query
+          description: |
+            A search term to filter the list of stations by name or address.
+        - name: country
+          value: DE
+          type: query
+          description: Filter stations by country code
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/unauthorized",
+            "title": "Unauthorized",
+            "status": 401,
+            "detail": "You do not have the necessary permissions."
+          }
+  - name: 401 Response
+    description: Unauthorized
+    request:
+      url: "{{baseUrl}}/stations"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: coordinates
+          value: 52.5200,13.4050
+          type: query
+          description: |
+            The latitude and longitude of the user's location, to narrow down the search results to sites within a proximity of this location.
+        - name: search
+          value: Milano Centrale
+          type: query
+          description: |
+            A search term to filter the list of stations by name or address.
+        - name: country
+          value: DE
+          type: query
+          description: Filter stations by country code
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/unauthorized</type>
+            <title>Unauthorized</title>
+            <status>401</status>
+            <detail>You do not have the necessary permissions.</detail>
+          </root>
+  - name: 403 Response
+    description: Forbidden
+    request:
+      url: "{{baseUrl}}/stations"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: coordinates
+          value: 52.5200,13.4050
+          type: query
+          description: |
+            The latitude and longitude of the user's location, to narrow down the search results to sites within a proximity of this location.
+        - name: search
+          value: Milano Centrale
+          type: query
+          description: |
+            A search term to filter the list of stations by name or address.
+        - name: country
+          value: DE
+          type: query
+          description: Filter stations by country code
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/forbidden",
+            "title": "Forbidden",
+            "status": 403,
+            "detail": "Access is forbidden with the provided credentials."
+          }
+  - name: 403 Response
+    description: Forbidden
+    request:
+      url: "{{baseUrl}}/stations"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: coordinates
+          value: 52.5200,13.4050
+          type: query
+          description: |
+            The latitude and longitude of the user's location, to narrow down the search results to sites within a proximity of this location.
+        - name: search
+          value: Milano Centrale
+          type: query
+          description: |
+            A search term to filter the list of stations by name or address.
+        - name: country
+          value: DE
+          type: query
+          description: Filter stations by country code
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/forbidden</type>
+            <title>Forbidden</title>
+            <status>403</status>
+            <detail>Access is forbidden with the provided credentials.</detail>
+          </root>
+  - name: 429 Response
+    description: Too Many Requests
+    request:
+      url: "{{baseUrl}}/stations"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: coordinates
+          value: 52.5200,13.4050
+          type: query
+          description: |
+            The latitude and longitude of the user's location, to narrow down the search results to sites within a proximity of this location.
+        - name: search
+          value: Milano Centrale
+          type: query
+          description: |
+            A search term to filter the list of stations by name or address.
+        - name: country
+          value: DE
+          type: query
+          description: Filter stations by country code
+    response:
+      status: 429
+      statusText: Too Many Requests
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/too-many-requests",
+            "title": "Too Many Requests",
+            "status": 429,
+            "detail": "You have exceeded the rate limit."
+          }
+  - name: 429 Response
+    description: Too Many Requests
+    request:
+      url: "{{baseUrl}}/stations"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: coordinates
+          value: 52.5200,13.4050
+          type: query
+          description: |
+            The latitude and longitude of the user's location, to narrow down the search results to sites within a proximity of this location.
+        - name: search
+          value: Milano Centrale
+          type: query
+          description: |
+            A search term to filter the list of stations by name or address.
+        - name: country
+          value: DE
+          type: query
+          description: Filter stations by country code
+    response:
+      status: 429
+      statusText: Too Many Requests
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/too-many-requests</type>
+            <title>Too Many Requests</title>
+            <status>429</status>
+            <detail>You have exceeded the rate limit.</detail>
+          </root>
+  - name: 500 Response
+    description: Internal Server Error
+    request:
+      url: "{{baseUrl}}/stations"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: coordinates
+          value: 52.5200,13.4050
+          type: query
+          description: |
+            The latitude and longitude of the user's location, to narrow down the search results to sites within a proximity of this location.
+        - name: search
+          value: Milano Centrale
+          type: query
+          description: |
+            A search term to filter the list of stations by name or address.
+        - name: country
+          value: DE
+          type: query
+          description: Filter stations by country code
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://example.com/errors/internal-server-error",
+            "title": "Internal Server Error",
+            "status": 500,
+            "detail": "An unexpected error occurred."
+          }
+  - name: 500 Response
+    description: Internal Server Error
+    request:
+      url: "{{baseUrl}}/stations"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: limit
+          value: "10"
+          type: query
+          description: The number of items to return per page
+        - name: coordinates
+          value: 52.5200,13.4050
+          type: query
+          description: |
+            The latitude and longitude of the user's location, to narrow down the search results to sites within a proximity of this location.
+        - name: search
+          value: Milano Centrale
+          type: query
+          description: |
+            A search term to filter the list of stations by name or address.
+        - name: country
+          value: DE
+          type: query
+          description: Filter stations by country code
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/problem+xml
+      body:
+        type: xml
+        data: |-
+          <?xml version="1.0" encoding="UTF-8"?>
+          <root>
+            <type>https://example.com/errors/internal-server-error</type>
+            <title>Internal Server Error</title>
+            <status>500</status>
+            <detail>An unexpected error occurred.</detail>
+          </root>
+
+docs: Returns a paginated and searchable list of all train stations.

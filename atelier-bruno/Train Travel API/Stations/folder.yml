@@ -1,0 +1,12 @@
+info:
+  name: Stations
+  type: folder
+
+request:
+  auth: inherit
+
+docs:
+  content: |
+    Find and filter train stations across Europe, including their location
+    and local timezone.
+  type: text/markdown

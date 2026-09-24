@@ -1,0 +1,10 @@
+info:
+  name: Authentification
+  type: folder
+
+request:
+  auth: inherit
+
+docs:
+  content: Création de compte et obtention des jetons. Public.
+  type: text/markdown

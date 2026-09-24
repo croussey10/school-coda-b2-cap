@@ -1,0 +1,4 @@
+name: Production (fictive)
+variables:
+  - name: baseUrl
+    value: https://api.catapulte-connect.ontb.example/v1

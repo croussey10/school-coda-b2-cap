@@ -1,0 +1,67 @@
+info:
+  name: Consulter son dossier voyageur
+  type: http
+  seq: 1
+  tags:
+    - Compte
+
+http:
+  method: GET
+  url: "{{baseUrl}}/users/me"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: Dossier du voyageur connecté.
+    request:
+      url: "{{baseUrl}}/users/me"
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+            "email": "bob@example.com",
+            "firstName": "Bob",
+            "lastName": "Morane",
+            "createdAt": "2027-02-14T10:03:00Z"
+          }
+  - name: 401 Response
+    description: Authentification requise ou jeton invalide/expiré.
+    request:
+      url: "{{baseUrl}}/users/me"
+      method: GET
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "about:blank",
+            "title": "Unauthorized",
+            "status": 401,
+            "detail": "Jeton d'accès absent, invalide ou expiré."
+          }
+
+docs: |
+  Retourne le dossier du voyageur connecté, identifié par son jeton d'accès.
+
+  Il n'existe pas d'opération pour consulter le dossier d'un autre voyageur : le
+  jeton désigne le titulaire, aucun identifiant ne circule dans le chemin.

@@ -1,0 +1,158 @@
+info:
+  name: Ouvrir un dossier voyageur
+  type: http
+  seq: 1
+  tags:
+    - Authentification
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/register"
+  body:
+    type: json
+    data: |-
+      {
+        "email": "bob@example.com",
+        "password": "correct-horse-battery-staple",
+        "firstName": "Bob",
+        "lastName": "Morane"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 201 Response
+    description: Dossier voyageur ouvert.
+    request:
+      url: "{{baseUrl}}/auth/register"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "email": "bob@example.com",
+            "password": "correct-horse-battery-staple",
+            "firstName": "Bob",
+            "lastName": "Morane"
+          }
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+            "email": "bob@example.com",
+            "firstName": "Bob",
+            "lastName": "Morane",
+            "createdAt": "2027-02-14T10:03:00Z"
+          }
+  - name: 400 Response
+    description: Corps de requête illisible (JSON malformé).
+    request:
+      url: "{{baseUrl}}/auth/register"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "email": "bob@example.com",
+            "password": "correct-horse-battery-staple",
+            "firstName": "Bob",
+            "lastName": "Morane"
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "about:blank",
+            "title": "Bad Request",
+            "status": 400,
+            "detail": "Syntax error in JSON body."
+          }
+  - name: 409 Response
+    description: Un dossier existe déjà pour cette adresse.
+    request:
+      url: "{{baseUrl}}/auth/register"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "email": "bob@example.com",
+            "password": "correct-horse-battery-staple",
+            "firstName": "Bob",
+            "lastName": "Morane"
+          }
+    response:
+      status: 409
+      statusText: Conflict
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://api.catapulte-connect.ontb.example/errors/email-taken",
+            "title": "Adresse déjà enregistrée",
+            "status": 409,
+            "detail": "Un dossier voyageur existe déjà pour bob@example.com."
+          }
+  - name: 422 Response
+    description: |
+      Le corps est syntaxiquement valide mais une ou plusieurs valeurs sont refusées.
+      À distinguer du `400`, qui signale un JSON illisible.
+    request:
+      url: "{{baseUrl}}/auth/register"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "email": "bob@example.com",
+            "password": "correct-horse-battery-staple",
+            "firstName": "Bob",
+            "lastName": "Morane"
+          }
+    response:
+      status: 422
+      statusText: Unprocessable Entity
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://api.catapulte-connect.ontb.example/errors/validation",
+            "title": "Données invalides",
+            "status": 422,
+            "detail": "1 champ est en erreur.",
+            "violations": [
+              {
+                "propertyPath": "passengers",
+                "message": "Le nombre de places doit être supérieur ou égal à 1."
+              }
+            ]
+          }
+
+docs: |
+  Crée un compte. L'ONTB ne vérifie pas l'adresse e-mail : la responsabilité
+  de sa validité incombe au voyageur, conformément au règlement en vigueur.

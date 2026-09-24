@@ -1,0 +1,143 @@
+info:
+  name: Renouveler le jeton d'accès
+  type: http
+  seq: 3
+  tags:
+    - Authentification
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/refresh"
+  body:
+    type: json
+    data: |-
+      {
+        "refreshToken": ""
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: Nouveau jeton d'accès délivré.
+    request:
+      url: "{{baseUrl}}/auth/refresh"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "refreshToken": ""
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "accessToken": ""
+          }
+  - name: 400 Response
+    description: Corps de requête illisible (JSON malformé).
+    request:
+      url: "{{baseUrl}}/auth/refresh"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "refreshToken": ""
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "about:blank",
+            "title": "Bad Request",
+            "status": 400,
+            "detail": "Syntax error in JSON body."
+          }
+  - name: 401 Response
+    description: Jeton de renouvellement invalide ou expiré.
+    request:
+      url: "{{baseUrl}}/auth/refresh"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "refreshToken": ""
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "",
+            "title": "",
+            "status": 0,
+            "detail": "",
+            "instance": ""
+          }
+  - name: 422 Response
+    description: |
+      Le corps est syntaxiquement valide mais une ou plusieurs valeurs sont refusées.
+      À distinguer du `400`, qui signale un JSON illisible.
+    request:
+      url: "{{baseUrl}}/auth/refresh"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "refreshToken": ""
+          }
+    response:
+      status: 422
+      statusText: Unprocessable Entity
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "https://api.catapulte-connect.ontb.example/errors/validation",
+            "title": "Données invalides",
+            "status": 422,
+            "detail": "1 champ est en erreur.",
+            "violations": [
+              {
+                "propertyPath": "passengers",
+                "message": "Le nombre de places doit être supérieur ou égal à 1."
+              }
+            ]
+          }
+
+docs: |
+  Échange un jeton de renouvellement encore valide contre un nouveau jeton d'accès.
+  Évite de redemander son mot de passe au voyageur toutes les heures.
+
+  Le jeton de renouvellement, lui, n'est pas renouvelé : au bout de 30 jours, il
+  faut repasser par `/auth/login`.

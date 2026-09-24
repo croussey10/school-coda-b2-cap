@@ -1,0 +1,5 @@
+name: Testing
+variables:
+  - name: baseUrl
+    value: https://testing/myapp
+    description: ""

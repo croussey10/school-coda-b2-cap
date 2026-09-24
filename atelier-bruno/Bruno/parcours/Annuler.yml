@@ -1,0 +1,16 @@
+info:
+  name: Annuler
+  type: http
+  seq: 6
+
+http:
+  method: DELETE
+  url: "{{baseUrl}}/bookings/2e3b4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

@@ -1,0 +1,10 @@
+info:
+  name: Compte
+  type: folder
+
+request:
+  auth: inherit
+
+docs:
+  content: Profil du voyageur et billets détenus.
+  type: text/markdown

@@ -1,0 +1,42 @@
+opencollection: 1.0.0
+
+info:
+  name: CATAPULTE Connect API
+
+request:
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+docs:
+  content: |
+    API de **CATAPULTE Connect**, la billetterie grand public du réseau de catapultes
+    exploité par l'**Office National des Trajectoires Balistiques (ONTB)**.
+
+    Le transport par catapulte est silencieux, sans moteur et panoramique. Chaque ville
+    du réseau dispose d'une catapulte unique, dressée en son centre : on ne voyage donc
+    pas de gare à gare mais **de ville à ville**. Une catapulte vise sa cible et lance —
+    tous les trajets sont **directs**, sans escale ni correspondance.
+
+    ## Parcours
+
+    La découverte du réseau (villes, trajets) est **publique** : on cherche librement.
+    La réservation exige un compte : c'est au moment de créer un panier que
+    l'authentification devient nécessaire.
+
+    ```
+    recherche -> résultats -> détail -> [connexion] -> panier -> paiement -> billets
+    ```
+
+    ## Conventions
+
+    - Les réponses de liste sont des **tableaux nus**, sans enveloppe ni métadonnées.
+    - Toutes les erreurs sont servies en `application/problem+json` (RFC 7807).
+    - Les durées sont en **minutes**. Les montants sont en euros.
+  type: text/markdown
+bundled: false
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git

@@ -1,0 +1,12 @@
+info:
+  name: Trips
+  type: folder
+
+request:
+  auth: inherit
+
+docs:
+  content: |
+    Timetables and routes for train trips between stations, including pricing
+    and availability.
+  type: text/markdown
